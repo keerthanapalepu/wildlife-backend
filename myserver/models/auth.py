@@ -13,7 +13,7 @@ class AccessToken(BaseModel):
     """Access token details"""
 
     access_token: str
-    access_token_expires: timedelta = timedelta(minutes=15)
+    access_token_expires: timedelta = timedelta(minutes=60)
 
 
 class RefreshToken(AccessToken):

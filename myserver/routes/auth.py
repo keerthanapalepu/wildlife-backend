@@ -7,7 +7,6 @@ from fastapi_jwt_auth import AuthJWT
 
 from myserver.models.auth import AccessToken, RefreshToken
 from myserver.models.user import User, UserAuth
-from myserver.util.password import hash_password
 
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -17,7 +16,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 async def login(user_auth: UserAuth, auth: AuthJWT = Depends()):
     """Authenticates and returns the user's JWT"""
     user = await User.by_email(user_auth.email)
-    if user is None or hash_password(user_auth.password) != user.password:
+    if user is None or user_auth.password != user.password:
         raise HTTPException(status_code=401, detail="Bad email or password")
     access_token = auth.create_access_token(subject=user.email)
     refresh_token = auth.create_refresh_token(subject=user.email)

@@ -17,7 +17,6 @@ class UserAuth(BaseModel):
     email: EmailStr
     password: str
 
-
 class UserUpdate(BaseModel):
     """Updatable user fields"""
 
@@ -32,6 +31,7 @@ class UserOut(UserUpdate):
     """User fields returned to the client"""
 
     email: Indexed(EmailStr, unique=True)
+    is_admin: bool = False
     disabled: bool = False
 
 
@@ -39,18 +39,19 @@ class User(Document, UserOut):
     """User DB representation"""
 
     password: str
+    is_admin: bool = False
     email_confirmed_at: Optional[datetime] = None
 
-    def __repr__(self) -> str:
+    def _repr_(self) -> str:
         return f"<User {self.email}>"
 
-    def __str__(self) -> str:
+    def _str_(self) -> str:
         return self.email
 
-    def __hash__(self) -> int:
+    def _hash_(self) -> int:
         return hash(self.email)
 
-    def __eq__(self, other: object) -> bool:
+    def _eq_(self, other: object) -> bool:
         if isinstance(other, User):
             return self.email == other.email
         return False

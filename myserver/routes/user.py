@@ -30,4 +30,4 @@ async def delete_user(auth: AuthJWT = Depends()):
     """Delete current user"""
     auth.jwt_required()
     await User.find_one(User.email == auth.get_jwt_subject()).delete()
-    return Response(status_code=204)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
